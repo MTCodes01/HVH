@@ -1,0 +1,227 @@
+
+
+
+/*hvh style*/
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: rgb(29, 183, 255);
+}
+
+#loading {
+  position: fixed; /* Make the loading screen fixed */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Background color during loading */
+  transition: transform 1s ease-in-out; /* Smooth transition for the logo */
+}
+
+#logo {
+  width: 150px; /* Adjust size of your logo */
+  animation: fadeIn 1s ease-in-out;
+}
+
+#content {
+  padding: 20px;
+  opacity: 0;
+  margin-top: 20px; /* Space for the logo */
+  color: white;
+  font-family: sans-serif;
+  transition: opacity 1s ease-in-out;
+  /* animation: opa 2s ease-in-out; */
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      width: 800px; 
+  }
+  to {
+      opacity: 1;
+      width: 150px;
+  }
+}
+
+/* @keyframes opa {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Styling for the body to give a background */
+/* Full-screen background */
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url('bg.png') ;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+  }
+  .container{
+  /* Centered div style */
+  width: 1400px;
+  height: 650px;
+
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+  backdrop-filter: blur(10px); /* Apply the blur effect */
+  border-radius: 10px;
+  color: #333;
+  text-align: center;
+    
+  }
+  
+  
+  /* Container positioned in the top-right corner for search */
+  .search-container {
+    position: absolute;
+    top: 20px;
+    left:20px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  /* Transparent search bar style */
+  .search-bar {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: #333;
+    backdrop-filter: blur(10px);
+    transition: background 0.3s ease;
+  }
+  
+  /* Placeholder color */
+  .search-bar::placeholder {
+    color: #aaa;
+  }
+  
+  /* Hover effect for the search bar */
+  .search-bar:hover, .search-bar:focus {
+    background: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Profile container positioned below search bar */
+  .profile-container {
+    position: absolute;
+    top: 20px; /* Adjusted below the search bar */
+    right: 20px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    transition: background 0.3s ease;
+  }
+  
+  /* Profile image style */
+  .profile-image {
+    width: 60px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 0px;
+  }
+  
+  /* Profile name style */
+  .profile-name {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Hover effect for profile container */
+  .profile-container:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+.menu-container{
+    margin-top: 15px;
+    ;
+    margin-right: 1500px;
+    color: white;
+    font-size: larger;
+}
+
+.analytics{
+    background-color: thistle;
+    width: 600px;
+    height: 550px;
+    border-radius: 10px;
+    text-align: left;
+    margin: 0%;
+    margin-left: 0%;
+    margin-top: 20px;
+     
+  
+  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+  backdrop-filter: blur(10px);
+}
+h2{
+    margin-left: 10px;
+    transform: translateY(10px);
+    color: white;
+    font-size: medium;
+    font-weight: lighter;
+}
+.analytics2{
+
+ background-color: thistle;
+width: 700px;
+height: 450px;
+border-radius: 10px;
+text-align: left;
+display: flex;
+background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+backdrop-filter: blur(10px);
+}
+.subanalytics{
+  display: flex;
+  margin: 0%;
+  margin-left: 0%;
+  gap: 20px; /* Space between the two divs */
+  justify-content: flex-start; /* Center the divs horizontally */
+  align-items: center; /* Center the divs vertically if needed */
+  padding: 0px;}
+
+  .middle{
+    background-color: thistle;
+width: 400px;
+height: 225px;
+border-radius: 10px;
+text-align: left;
+display: flex;
+background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+backdrop-filter: blur(10px);
+  }
