@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/64d58efce2.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'login.css' %}" />
+    <title>Login & Sign up Form</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form class="sign-in-form" id="login-form">
+            <h2 class="title">Login</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input
+                type="text"
+                placeholder="Username"
+                required
+                id="login-username"
+              />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                id="login-password"
+              />
+            </div>
+            <button type="submit" class="btn">Login</button>
+          </form>
+          <form class="sign-up-form" id="signup-form">
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input
+                type="email"
+                placeholder="Email"
+                required
+                id="signup-email"
+              />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input
+                type="text"
+                placeholder="Username"
+                required
+                id="signup-username"
+              />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-phone"></i>
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                required
+                id="signup-phone"
+              />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input
+                type="password"
+                placeholder="Password"
+                required
+                id="signup-password"
+              />
+            </div>
+            <button type="submit" class="btn">Sign up</button>
+          </form>
+        </div>
+      </div>
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>New here?</h3>
+            <p>Sign up and discover the benefits of our service.</p>
+            <button class="btn transparent" id="sign-up-btn">Sign up</button>
+          </div>
+          <img
+            src="{% static 'assets/log.svg' %}"
+            class="image"
+            alt="Log Image"
+          />
+        </div>
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>One of us?</h3>
+            <p>If you already have an account, just Login.</p>
+            <button class="btn transparent" id="sign-in-btn">Login</button>
+          </div>
+          <img
+            src="{% static 'assets/register.svg' %}"
+            class="image"
+            alt="Register Image"
+          />
+        </div>
+      </div>
+    </div>
+    <!-- src="{% static 'login.js' %}" -->
+    <script src="{% static 'login.js' %}"></script>
+  </body>
+</html>

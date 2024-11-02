@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Query Form</title>
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'query.css' %}">
+</head>
+<body>
+    <div class="query-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card active" id="q1">
+            <h2 class="title">Industry Information</h2>
+            <p class="question">Which field describes your industry well?</p>
+            <div class="options">
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Software" onclick="handleIndustryChange('Software')"> Software
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Cloth" onclick="handleIndustryChange('Cloth')"> Cloth
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Medicines" onclick="handleIndustryChange('Medicines')"> Medicines
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Cosmetics" onclick="handleIndustryChange('Cosmetics')"> Cosmetics
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Other" onclick="handleIndustryChange('Other')"> Others
+                </label>
+                <div class="other-input" id="industry-other">
+                    <input type="text" class="input-field" placeholder="Please specify your industry" id="industry-other-input" onblur="handleIndustryChange(this.value)">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="nextQuestion(1)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card" id="q2">
+            <h2 class="title">Company Details</h2>
+            <p class="question">Name and location of the industry</p>
+            <div class="options">
+                <input type="text" class="input-field" placeholder="Company Name" id="company-name">
+                <input type="text" class="input-field" placeholder="Location" id="company-location" oninput="fetchLocations(this.value)">
+                <div id="location-suggestions"></div> <!-- Dropdown for location suggestions -->
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(2)">Previous</button>
+                <button class="btn" onclick="nextQuestion(2)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card" id="q3">
+            <h2 class="title">Role Information</h2>
+            <p class="question">Your role?</p>
+            <div class="options">
+                <input type="text" class="input-field" placeholder="Enter your role" id="role" oninput="filterRoles(this.value)">
+                <div id="role-suggestions"></div> <!-- Dropdown for role suggestions -->
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(3)">Previous</button>
+                <button class="btn" onclick="nextQuestion(3)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card" id="q4">
+            <h2 class="title">Challenges</h2>
+            <p class="question">Main challenges you face?</p>
+            <div class="options">
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Machine downtime"> Machine downtime
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Labor issues"> Labor issues
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Supply chain"> Supply chain
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Other"> Other
+                </label>
+                <div class="other-input" id="challenges-other">
+                    <input type="text" class="input-field" placeholder="Please specify your challenge" id="challenges-other-input">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(4)">Previous</button>
+                <button class="btn" onclick="nextQuestion(4)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-card" id="q5">
+            <h2 class="title">Goals</h2>
+            <p class="question">What are your goals?</p>
+            <div class="options">
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Increase Sales"> Increase Sales
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Reduce Costs"> Reduce Costs
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Increase Safety"> Increase Safety
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Other"> Other
+                </label>
+                <div class="other-input" id="goals-other">
+                    <input type="text" class="input-field" placeholder="Please specify your goal" id="goals-other-input">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(5)">Previous</button>
+                <button class="btn" onclick="submitForm()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="thank-you-container" id="thank-you">
+        <div class="party-popper">
+            🎉
+        </div>
+        <h1 class="thank-you-title">Thank You!</h1>
+        <p>Your submission has been received. We appreciate your feedback!</p>
+    </div>
+
+    <script src="{% static 'query.js' %}"></script>
+</body>
+</html>

@@ -1,47 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machines Overview</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            text-align: center;
-        }
-        .search-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .machine-card {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .machine-card h3 {
-            margin: 0;
-        }
-    </style>
-</head>
-<body>
-
-    <h1>Machines Overview</h1>
-    <div class="search-container">
-        <input type="text" id="searchBox" placeholder="Search machines...">
-    </div>
-
-    <div id="machineList"></div>
-
-    <script>
-        // Fetch machine data from Flask API
+// Fetch machine data from Flask API
         async function fetchMachines() {
             try {
                 const response = await fetch('/api/machines'); // This will call the new endpoint
@@ -87,6 +44,3 @@
 
         // Load machines on page load
         document.addEventListener('DOMContentLoaded', fetchMachines);
-    </script>
-</body>
-</html>
