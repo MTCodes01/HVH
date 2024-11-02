@@ -29,18 +29,29 @@ signupForm.addEventListener("submit", (e) => {
     },
     body: JSON.stringify({ email, username, phone, password }),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((data) => {
+          throw new Error(
+            data.error || "Error during sign up. Please try again."
+          );
+        });
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data.success) {
         alert("Sign up successful! You can now log in.");
         signupForm.reset();
       } else {
-        alert(data.error || "Error during sign up. Please try again.");
+        throw new Error(
+          data.error || "Error during sign up. Please try again."
+        );
       }
     })
     .catch((error) => {
       console.error("Error:", error);
-      alert("Error during sign up. Please try again.");
+      alert(error.message);
     });
 });
 
@@ -52,7 +63,6 @@ loginForm.addEventListener("submit", (e) => {
   const password = document.getElementById("login-password").value;
 
   fetch("/login/", {
-    // Use Django's URL name here
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -60,17 +70,30 @@ loginForm.addEventListener("submit", (e) => {
     },
     body: JSON.stringify({ username, password }),
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        return response.json().then((data) => {
+          throw new Error(
+            data.error || "Error during login. Please try again."
+          );
+        });
+      }
+      return response.json();
+    })
     .then((data) => {
       if (data.success) {
+        localStorage.setItem("name", username);
+        localStorage.setItem("done", "true");
         window.location.href = "/query/";
       } else {
-        alert(data.error || "Invalid username or password. Please try again.");
+        throw new Error(
+          data.error || "Invalid username or password. Please try again."
+        );
       }
     })
     .catch((error) => {
       console.error("Error:", error);
-      alert("Error during login. Please try again.");
+      alert(error.message);
     });
 });
 

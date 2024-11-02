@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://cdn.plot.ly/plotly-2.35.2.min.js"
+      charset="utf-8"
+    ></script>
+    <style>
+      body {
+        background: url("{% static 'assets/bg.png' %}");
+      }
+    </style>
+    <link rel="stylesheet" href="{% static 'styles.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="loading">
+        <a href="../main.html" id="logo-link">
+          <img
+            src="{% static 'assets/logo.png' %}"
+            alt="Project Logo"
+            id="logo"
+          />
+        </a>
+      </div>
+      <div id="content">
+        <div class="search-container">
+          <input type="text" class="search-bar" placeholder="Search..." />
+        </div>
+        <div class="profile-container">
+          <img
+            src="{% static 'assets/person-circle.svg' %}"
+            alt="Profile Picture"
+            class="profile-image"
+            width="20"
+          />
+          <div class="profile-name">--</div>
+        </div>
+        <div class="menu-container">ANALYTICS</div>
+        <div class="subanalytics">
+          <div class="analytics analytics1">
+            <h2>General Stats</h2>
+          </div>
+          <div class="middle">
+            <div class="top center">
+              <h2 class="title">--</h2>
+              <div id="chart"></div>
+            </div>
+
+            <div class="bottom center">
+              <h2>Graph</h2>
+            </div>
+          </div>
+          <div class="analytics analytics2">
+            <h2>General Stats</h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{% static 'script.js' %}"></script>
+  </body>
+</html>
