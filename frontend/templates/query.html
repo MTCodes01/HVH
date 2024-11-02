@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Query Form</title>
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Prevent scrollbars during animation */
+        }
+
+        .query-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 600px;
+            position: relative; /* For positioning relative to container */
+        }
+
+        .question-card {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .title {
+            font-size: 1.8rem;
+            color: #444;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            position: relative; /* Added for dropdown positioning */
+        }
+
+        .other-input {
+            display: none;
+            margin-top: 0.5rem;
+            margin-left: 1.5rem;
+            animation: fadeIn 0.3s;
+        }
+
+        .other-input.active {
+            display: block;
+        }
+
+        .btn {
+            width: 150px;
+            background-color: #5995fd;
+            border: none;
+            outline: none;
+            height: 49px;
+            border-radius: 49px;
+            color: #fff;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .btn:hover {
+            background-color: #4d84e2;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #5995fd;
+            transition: width 0.3s ease;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        /* Styles for location suggestions */
+        #location-suggestions, #role-suggestions {
+            display: none;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            position: absolute;
+            z-index: 1000;
+            background: white;
+            width: calc(100% - 16px); /* Adjust for input padding */
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 0.8rem;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Styles for thank you page */
+        .thank-you-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100vh;
+        }
+
+        .thank-you-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #444;
+        }
+
+        .party-popper {
+            font-size: 5rem;
+            animation: pop 1s infinite;
+        }
+
+        @keyframes pop {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="query-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- Question 1 -->
+        <div class="question-card active" id="q1">
+            <h2 class="title">Industry Information</h2>
+            <p class="question">Which field describes your industry well?</p>
+            <div class="options">
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Software"> Software
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Cloth"> Cloth
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Medicines"> Medicines
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Cosmetics"> Cosmetics
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="industry" value="Other"> Others
+                </label>
+                <div class="other-input" id="industry-other">
+                    <input type="text" class="input-field" placeholder="Please specify your industry" id="industry-other-input">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="nextQuestion(1)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="question-card" id="q2">
+            <h2 class="title">Company Details</h2>
+            <p class="question">Name and location of the industry</p>
+            <div class="options">
+                <input type="text" class="input-field" placeholder="Company Name" id="company-name">
+                <input type="text" class="input-field" placeholder="Location" id="company-location" oninput="fetchLocations(this.value)">
+                <div id="location-suggestions"></div> <!-- Dropdown for location suggestions -->
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(2)">Previous</button>
+                <button class="btn" onclick="nextQuestion(2)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="question-card" id="q3">
+            <h2 class="title">Role Information</h2>
+            <p class="question">Your role?</p>
+            <div class="options">
+                <input type="text" class="input-field" placeholder="Enter your role" id="role" oninput="filterRoles(this.value)">
+                <div id="role-suggestions"></div> <!-- Dropdown for role suggestions -->
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(3)">Previous</button>
+                <button class="btn" onclick="nextQuestion(3)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="question-card" id="q4">
+            <h2 class="title">Challenges</h2>
+            <p class="question">Main challenges you face?</p>
+            <div class="options">
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Machine downtime"> Machine downtime
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Labor issues"> Labor issues
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Supply chain"> Supply chain
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="challenges" value="Other"> Other
+                </label>
+                <div class="other-input" id="challenges-other">
+                    <input type="text" class="input-field" placeholder="Please specify your challenge" id="challenges-other-input">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(4)">Previous</button>
+                <button class="btn" onclick="nextQuestion(4)">Next</button>
+            </div>
+        </div>
+
+        <!-- Question 5 -->
+        <div class="question-card" id="q5">
+            <h2 class="title">Goals</h2>
+            <p class="question">What are your goals?</p>
+            <div class="options">
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Increase Sales"> Increase Sales
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Reduce Costs"> Reduce Costs
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Increase Safety"> Increase Safety
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="goals" value="Other"> Other
+                </label>
+                <div class="other-input" id="goals-other">
+                    <input type="text" class="input-field" placeholder="Please specify your goal" id="goals-other-input">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn" onclick="previousQuestion(5)">Previous</button>
+                <button class="btn" onclick="submitForm()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="thank-you-container" id="thank-you">
+        <div class="party-popper">
+            🎉
+        </div>
+        <h1 class="thank-you-title">Thank You!</h1>
+        <p>Your submission has been received. We appreciate your feedback!</p>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        const totalQuestions = 5;
+
+        const roles = [
+            "Chief Executive Officer (CEO)",
+            "Chief Marketing Officer (CMO)",
+            "Chief Human Resources Officer (CHRO)",
+            "Chief Financial Officer (CFO)",
+            "Vice President (VP)",
+            "Assistant Vice President (AVP)",
+            "Senior Manager",
+            "Manager",
+            "Assistant Manager",
+            "Associate / Executive"
+        ];
+
+        function nextQuestion(current) {
+            // Validate current question before moving to next
+            if (current === 1 && !document.querySelector('input[name="industry"]:checked')) {
+                alert("Please select an industry.");
+                return;
+            }
+
+            if (current === 2) {
+                // Validate company name and location
+                const companyName = document.getElementById('company-name').value;
+                const companyLocation = document.getElementById('company-location').value;
+                if (!companyName || !companyLocation) {
+                    alert("Please fill in both company name and location.");
+                    return;
+                }
+            }
+
+            if (current === 4 && !document.querySelector('input[name="challenges"]:checked')) {
+                alert("Please select a challenge.");
+                return;
+            }
+
+            if (current === 5 && !document.querySelector('input[name="goals"]:checked')) {
+                alert("Please select a goal.");
+                return;
+            }
+
+            // Hide current question
+            document.getElementById(`q${current}`).classList.remove('active');
+            currentQuestion++;
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+            updateProgress();
+        }
+
+        function previousQuestion(current) {
+            document.getElementById(`q${current}`).classList.remove('active');
+            currentQuestion--;
+            document.getElementById(`q${currentQuestion}`).classList.add('active');
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        // Handle showing/hiding other input fields
+        document.querySelectorAll('input[name="industry"]').forEach((radio) => {
+            radio.addEventListener('change', function() {
+                const otherInput = document.getElementById('industry-other');
+                if (this.value === 'Other') {
+                    otherInput.classList.add('active');
+                } else {
+                    otherInput.classList.remove('active');
+                }
+            });
+        });
+
+        document.querySelectorAll('input[name="challenges"]').forEach((radio) => {
+            radio.addEventListener('change', function() {
+                const otherInput = document.getElementById('challenges-other');
+                if (this.value === 'Other') {
+                    otherInput.classList.add('active');
+                } else {
+                    otherInput.classList.remove('active');
+                }
+            });
+        });
+
+        document.querySelectorAll('input[name="goals"]').forEach((radio) => {
+            radio.addEventListener('change', function() {
+                const otherInput = document.getElementById('goals-other');
+                if (this.value === 'Other') {
+                    otherInput.classList.add('active');
+                } else {
+                    otherInput.classList.remove('active');
+                }
+            });
+        });
+
+        async function fetchLocations(query) {
+            const suggestionsBox = document.getElementById('location-suggestions');
+            suggestionsBox.innerHTML = ''; // Clear previous suggestions
+            if (query.length < 2) {
+                suggestionsBox.style.display = 'none'; // Hide suggestions if input is too short
+                return;
+            }
+
+            const apiKey = 'pk.8f23c36b3721a748dee3ec5aae8428c0'; // Replace with your LocationIQ API key
+            const url = `https://us1.locationiq.com/v1/autocomplete.php?key=${apiKey}&q=${encodeURIComponent(query)}&format=json`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.length > 0) {
+                    suggestionsBox.style.display = 'block'; // Show suggestions
+                    data.forEach(result => {
+                        const suggestion = document.createElement('div');
+                        suggestion.classList.add('suggestion-item');
+                        suggestion.textContent = `${result.display_place}, ${result.address.city || ''} ${result.address.state || ''}`.trim(); // Format as needed
+                        suggestion.onclick = () => selectLocation(suggestion.textContent);
+                        suggestionsBox.appendChild(suggestion);
+                    });
+                } else {
+                    suggestionsBox.style.display = 'none'; // Hide if no results
+                }
+            } catch (error) {
+                console.error('Error fetching location suggestions:', error);
+                suggestionsBox.style.display = 'none'; // Hide on error
+            }
+        }
+
+        // Function to handle when a location suggestion is selected
+        function selectLocation(location) {
+            document.getElementById('company-location').value = location; // Set the input field value
+            document.getElementById('location-suggestions').innerHTML = ''; // Clear suggestions
+            document.getElementById('location-suggestions').style.display = 'none'; // Hide suggestions
+        }
+
+        // Function to filter role suggestions
+        function filterRoles(query) {
+            const suggestionsBox = document.getElementById('role-suggestions');
+            suggestionsBox.innerHTML = ''; // Clear previous suggestions
+            if (query.length < 1) {
+                suggestionsBox.style.display = 'none'; // Hide suggestions if input is too short
+                return;
+            }
+
+            const filteredRoles = roles.filter(role => role.toLowerCase().includes(query.toLowerCase()));
+            if (filteredRoles.length > 0) {
+                suggestionsBox.style.display = 'block'; // Show suggestions
+                filteredRoles.forEach(role => {
+                    const suggestion = document.createElement('div');
+                    suggestion.classList.add('suggestion-item');
+                    suggestion.textContent = role; // Role text
+                    suggestion.onclick = () => selectRole(role);
+                    suggestionsBox.appendChild(suggestion);
+                });
+            } else {
+                suggestionsBox.style.display = 'none'; // Hide if no results
+            }
+        }
+
+        // Function to handle when a role suggestion is selected
+        function selectRole(role) {
+            document.getElementById('role').value = role; // Set the input field value
+            document.getElementById('role-suggestions').innerHTML = ''; // Clear suggestions
+            document.getElementById('role-suggestions').style.display = 'none'; // Hide suggestions
+        }
+
+        function submitForm() {
+            document.querySelector('.query-container').style.display = 'none'; // Hide the form
+            document.getElementById('thank-you').style.display = 'flex'; // Show thank you page
+            // Here you can gather the data and send it to your backend
+        }
+    </script>
+</body>
+</html>
