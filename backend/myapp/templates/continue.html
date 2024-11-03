@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Productivity Analysis</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 2rem;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-title {
+            text-align: center;
+            color: #1a1a1a;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-title {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .high-productivity {
+            color: #22c55e;
+        }
+
+        .low-productivity {
+            color: #ef4444;
+        }
+
+        .neutral {
+            color: #3b82f6;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        #chart {
+            width: 100%;
+            overflow: visible;
+        }
+
+        #chart svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .assessment-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .assessment-title {
+            font-size: 1.25rem;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .assessment-content {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .recommendations {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .line {
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .area {
+            opacity: 0.2;
+        }
+
+        .tooltip {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 5px;
+            pointer-events: none;
+            font-size: 0.875rem;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .chart-container {
+                padding: 1rem;
+            }
+
+            .metric-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1 class="dashboard-title">Workflow Productivity Analysis</h1>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3 class="metric-title">Total Hours Worked</h3>
+                <div id="total-hours" class="metric-value neutral"></div>
+            </div>
+            <div class="metric-card">
+                <h3 class="metric-title">Total Idle Time</h3>
+                <div id="total-idle" class="metric-value neutral"></div>
+            </div>
+            <div class="metric-card">
+                <h3 class="metric-title">Productivity Score</h3>
+                <div id="productivity-score" class="metric-value"></div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Productivity Timeline</h2>
+            <div id="chart"></div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #3b82f6"></div>
+                    <span>Productive Hours</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f97316"></div>
+                    <span>Idle Time</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="assessment-card">
+            <h2 class="assessment-title">Productivity Assessment</h2>
+            <div id="assessment" class="assessment-content"></div>
+            <div id="recommendations" class="recommendations"></div>
+        </div>
+    </div>
+
+    <script>
+        function createChart() {
+            // Clear existing chart
+            d3.select("#chart").selectAll("*").remove();
+
+            // Get container width
+            const container = document.querySelector('#chart');
+            const containerWidth = container.getBoundingClientRect().width;
+
+            // Calculate dimensions based on container
+            const margin = {
+                top: 20,
+                right: 30,
+                bottom: 50,
+                left: 50
+            };
+            const width = containerWidth - margin.left - margin.right;
+            const height = Math.min(400, window.innerHeight * 0.5) - margin.top - margin.bottom;
+
+            // Sample data
+            const data = [
+                {"date": "2024-11-01", "hours_worked": 6, "idle_time": 2},
+                {"date": "2024-11-02", "hours_worked": 7, "idle_time": 1.5},
+                {"date": "2024-11-03", "hours_worked": 8, "idle_time": 1},
+                {"date": "2024-11-04", "hours_worked": 5, "idle_time": 3},
+                {"date": "2024-11-05", "hours_worked": 9, "idle_time": 0.5}
+            ];
+
+            // Parse dates
+            const parseDate = d3.timeParse("%Y-%m-%d");
+            data.forEach(d => {
+                d.date = parseDate(d.date);
+                d.hours_worked = +d.hours_worked;
+                d.idle_time = +d.idle_time;
+            });
+
+            // Calculate metrics
+            const totalHoursWorked = d3.sum(data, d => d.hours_worked);
+            const totalIdleTime = d3.sum(data, d => d.idle_time);
+            const productivityScore = ((totalHoursWorked - totalIdleTime) / totalHoursWorked * 100).toFixed(1);
+
+            // Update metrics display
+            document.getElementById('total-hours').textContent = `${totalHoursWorked.toFixed(1)} hrs`;
+            document.getElementById('total-idle').textContent = `${totalIdleTime.toFixed(1)} hrs`;
+
+            const scoreElement = document.getElementById('productivity-score');
+            scoreElement.textContent = `${productivityScore}%`;
+            scoreElement.className = `metric-value ${productivityScore > 70 ? 'high-productivity' : 'low-productivity'}`;
+
+            // Create SVG
+            const svg = d3.select("#chart")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Define scales
+            const xScale = d3.scaleTime()
+                .domain(d3.extent(data, d => d.date))
+                .range([0, width]);
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(data, d => d.hours_worked + d.idle_time)])
+                .nice()
+                .range([height, 0]);
+
+            // Define line
+            const line = d3.line()
+                .x(d => xScale(d.date))
+                .y(d => yScale(d.hours_worked));
+
+            // Define area
+            const area = d3.area()
+                .x(d => xScale(d.date))
+                .y0(yScale(0))
+                .y1(d => yScale(d.hours_worked));
+
+            // Append area path
+            svg.append("path")
+                .datum(data)
+                .attr("class", "area")
+                .attr("fill", "#3b82f6")
+                .attr("d", area);
+
+            // Append line path
+            svg.append("path")
+                .datum(data)
+                .attr("class", "line")
+                .attr("fill", "none")
+                .attr("stroke", "#3b82f6")
+                .attr("d", line);
+
+            // Append idle time as line
+            const idleLine = d3.line()
+                .x(d => xScale(d.date))
+                .y(d => yScale(d.idle_time));
+
+            svg.append("path")
+                .datum(data)
+                .attr("class", "line")
+                .attr("fill", "none")
+                .attr("stroke", "#f97316")
+                .attr("d", idleLine);
+
+            // Add axes
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(xScale)
+                    .ticks(5)  // Limit the number of ticks
+                    .tickFormat(d3.timeFormat("%d %b")));  // Short date format
+
+            svg.append("g")
+                .call(d3.axisLeft(yScale));
+
+            // Tooltip
+            const tooltip = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
+
+            svg.selectAll(".dot")
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "dot")
+                .attr("cx", d => xScale(d.date))
+                .attr("cy", d => yScale(d.hours_worked))
+                .attr("r", 5)
+                .attr("fill", "#3b82f6")
+                .on("mouseover", function (event, d) {
+                    tooltip.transition().duration(200).style("opacity", .9);
+                    tooltip.html(`Date: ${d3.timeFormat("%d %b")(d.date)}<br>Worked: ${d.hours_worked} hrs<br>Idle: ${d.idle_time} hrs`)
+                        .style("left", (event.pageX + 5) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function (d) {
+                    tooltip.transition().duration(500).style("opacity", 0);
+                });
+        }
+
+        function updateAssessmentAndRecommendations() {
+            const productivityScore = parseFloat(document.getElementById('productivity-score').textContent);
+            const assessmentDiv = document.getElementById('assessment');
+            const recommendationsDiv = document.getElementById('recommendations');
+
+            let assessmentText;
+            let recommendationsText;
+
+            if (productivityScore > 70) {
+                assessmentText = "Excellent job! You're maintaining a high level of productivity.";
+                recommendationsText = "Keep up the great work! Consider setting new challenges to maintain your momentum.";
+            } else if (productivityScore > 50) {
+                assessmentText = "Good work! Your productivity is above average.";
+                recommendationsText = "Focus on reducing idle time further. Perhaps set specific time blocks for tasks.";
+            } else {
+                assessmentText = "Your productivity could use some improvement.";
+                recommendationsText = "Try breaking tasks into smaller steps and minimizing distractions to enhance focus.";
+            }
+
+            assessmentDiv.textContent = assessmentText;
+            recommendationsDiv.textContent = recommendationsText;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            createChart();
+            updateAssessmentAndRecommendations();
+        });
+    </script>
+</body>
+</html>

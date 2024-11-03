@@ -1,0 +1,22 @@
+{% load static %}
+{% load templates%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machines Overview</title>
+    <link rel="stylesheet" href="{% static 'machines.css' %}">
+</head>
+<body>
+
+    <h1>Machines Overview</h1>
+    <div class="search-container">
+        <input type="text" id="searchBox" placeholder="Search machines...">
+    </div>
+
+    <div id="machineList"></div>
+
+    <script src="{% static 'machines.js' %}"></script>
+</body>
+</html>
