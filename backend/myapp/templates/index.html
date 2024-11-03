@@ -9,6 +9,7 @@
       src="https://cdn.plot.ly/plotly-2.35.2.min.js"
       charset="utf-8"
     ></script>
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
     <style>
       body {
         background: url("{% static 'assets/bg.png' %}");
@@ -29,7 +30,7 @@
       </div>
       <div id="content">
         <div class="search-container">
-          <input type="text" class="search-bar" placeholder="Search..." />
+          <a href="/add/" class="add">ADD WORKER DATA</a>
         </div>
         <div class="profile-container">
           <img
@@ -43,25 +44,33 @@
         <div class="menu-container">ANALYTICS</div>
         <div class="subanalytics">
           <div class="analytics analytics1">
-            <h2>General Stats</h2>
+            <div id="chartContainer2" style="height: 370px; width: 100%"></div>
           </div>
           <div class="middle">
-            <div class="top center">
-              <h2 class="title">--</h2>
-              <div id="chart"></div>
-            </div>
+            <button onclick="go()" class="top center">
+              <h2 class="title">Click Here for more details!</h2>
+              <!-- <div id="chartContainer" style="height: 370px; width: 100%"></div> -->
+            </button>
 
-            <div class="bottom center">
+            <!-- <div class="bottom center">
               <h2>Graph</h2>
-            </div>
+            </div> -->
           </div>
           <div class="analytics analytics2">
-            <h2>General Stats</h2>
+            <!-- <h2>General Stats</h2>
+            <div id="chart"></div> -->
+            <!-- <h2 class="title">--</h2> -->
+            <div id="chartContainer" style="height: 370px; width: 100%"></div>
           </div>
         </div>
       </div>
     </div>
 
     <script src="{% static 'script.js' %}"></script>
+    <script>
+      function go() {
+        window.location.href = "/continue/";
+      }
+    </script>
   </body>
 </html>

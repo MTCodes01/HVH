@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Lilita+One&family=Rubik+Glitch&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Lilita+One&family=Rubik+Glitch&display=swap");
 
 /*hvh style*/
 body {
@@ -95,31 +95,23 @@ body {
   max-width: 20vw;
 }
 
-/* Transparent search bar style */
-.search-bar {
-  width: 100%;
-  padding: 10px 15px;
-  font-size: 16px;
+
+.add {
+  margin-top: 5vh;
+  text-decoration: none;
+  color: #000000;
   border: none;
   border-radius: 2vw;
-  outline: none;
-  background: rgba(255, 255, 255, 0.2);
-  color: #000000;
-  backdrop-filter: blur(10px);
-  transition: background 0.3s ease;
-}
-
-/* Placeholder color */
-.search-bar::placeholder {
-  color: #00000079;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 10px 20px;
 }
 
 /* Hover effect for the search bar */
-.search-bar:hover,
+/* .search-bar:hover,
 .search-bar:focus {
   background: rgba(255, 255, 255, 0.3);
   color: #00000079;
-}
+} */
 
 /* Profile container positioned below search bar */
 .profile-container {
@@ -165,6 +157,8 @@ body {
 }
 
 .analytics {
+  display: flex;
+  align-items: center;
   background-color: thistle;
   width: 30vw;
   height: 65vh;
@@ -173,7 +167,7 @@ body {
   margin: 0%;
   margin-left: 0%;
   margin-top: 20px;
-  background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+  background: rgba(0, 0, 0, 0.2); /* Semi-transparent white background */
   backdrop-filter: blur(10px);
 }
 h2 {
@@ -196,7 +190,7 @@ h2 {
 .subanalytics {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(2, 2fr);
+  grid-template-rows: repeat(1, 1fr);
   gap: 1vw;
 
   /* margin: 0%;
@@ -207,17 +201,66 @@ h2 {
   padding: 0px; */
 }
 
-.middle {
+/* .middle {
   display: grid;
-}
+} */
 
 .center {
+   cursor: hand;
   background-color: thistle;
   width: 15vw;
+  height: 20vh;
+  border-radius: 10px;
+  text-align: left;
+  display: flex;
+  position: relative;
+  top: 30%;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* #chart {
+  background-color: transparent;
+  width: 25vw;
   height: 225px;
   border-radius: 10px;
   text-align: left;
   display: flex;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
+}
+
+#chart .bg {
+  position: absolute;
+  top: 5vh;
+}
+
+#chart {
+  scale: 1.5;
+} */
+
+#chartContainer {
+  color: #000000;
+}
+
+#chartContainer .canvasjs-chart-credit {
+  display: none;
+}
+
+#chartContainer2 .canvasjs-chart-credit {
+  display: none;
+}
+
+.con
+
+.title { 
+  font-family: "Lilita One", sans-serif;  
+  font-weight: 400;
+  font-style: normal;
+  color: black;
+  font-size: 3vw;
+}
+
+.top {
+  border: none;
+  display: flex;
+  align-items: center;
 }
