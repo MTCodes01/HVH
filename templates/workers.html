@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BULK IMPORT WORKERS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h2, h3 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        input[type="text"], select {
+            width: 150px;
+            padding: 5px;
+            margin: 5px;
+        }
+        button {
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #featureContainer {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>BULK IMPORT WORKERS</h2>
+    <div>
+        <input type="file" id="fileInput">
+        <button id="importButton">IMPORT WORKERS</button>
+    </div>
+
+    <h3>ADD WORKER</h3>
+    <div>
+        <input type="text" id="workerId" placeholder="WORKER ID" required>
+        <input type="text" id="workerName" placeholder="NAME" required>
+        <input type="text" id="workerRole" placeholder="ROLE" required>
+        <select id="workerSkillLevel">
+            <option value="">SELECT SKILL LEVEL</option>
+            <option value="Beginner">BEGINNER</option>
+            <option value="Intermediate">INTERMEDIATE</option>
+            <option value="Advanced">ADVANCED</option>
+        </select>
+        <select id="workerAvailability">
+            <option value="">SELECT AVAILABILITY</option>
+            <option value="On Duty">ON DUTY</option>
+            <option value="Available">AVAILABLE</option>
+            <option value="Leave">LEAVE</option>
+        </select>
+        <div id="featureContainer">
+            <input type="text" class="featureName" placeholder="FEATURE NAME">
+            <input type="text" class="featureValue" placeholder="FEATURE VALUE">
+            <button id="addFeatureButton">ADD FEATURE</button>
+        </div>
+        <button id="saveWorkerButton">SAVE WORKER</button>
+    </div>
+
+    <table id="workerTable">
+        <thead>
+            <tr id="headerRow">
+                <th>SERIAL NO.</th>
+                <th>WORKER ID</th>
+                <th>NAME</th>
+                <th>ROLE</th>
+                <th>SKILL LEVEL</th>
+                <th>AVAILABILITY</th>
+                <!-- Additional Features headers will be added dynamically -->
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dynamic table content will be generated here -->
+        </tbody>
+    </table>
+
+    <script>
+        let workers = [];
+        let featureHeaders = new Set(["WORKER ID", "NAME", "ROLE", "SKILL LEVEL", "AVAILABILITY"]);
+        let featureCount = 0;
+
+        // Function to handle file import and parse CSV
+        function importWorkers(file) {
+            parseCSV(file, (importedWorkers) => {
+                workers = workers.concat(importedWorkers);
+                displayWorkers();
+            });
+        }
+
+        // Function to display workers in the table
+        function displayWorkers() {
+            const tableBody = document.getElementById('tableBody');
+            const headerRow = document.getElementById('headerRow');
+
+            // Clear previous table contents
+            tableBody.innerHTML = '';
+
+            // Create headers based on unique feature labels
+            headerRow.innerHTML = `<th>SERIAL NO.</th>`;
+            featureHeaders.forEach(header => {
+                headerRow.innerHTML += `<th>${header}</th>`;
+            });
+
+            workers.forEach((worker, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${index + 1}</td>`;
+
+                featureHeaders.forEach(header => {
+                    row.innerHTML += `<td>${worker[header] || 'N/A'}</td>`;
+                });
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // CSV parsing function (simplified for this example)
+        function parseCSV(file, callback) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const text = event.target.result;
+                const rows = text.split("\n").map(row => row.split(","));
+                const headers = rows[0];
+                const data = rows.slice(1).map(row => {
+                    const worker = {};
+                    headers.forEach((header, i) => {
+                        featureHeaders.add(header.trim().toUpperCase());
+                        worker[header.trim().toUpperCase()] = row[i] ? row[i].trim() : 'N/A';
+                    });
+                    return worker;
+                });
+                callback(data);
+            };
+            reader.readAsText(file);
+        }
+
+        // Event listener for import button
+        document.getElementById('importButton').addEventListener('click', () => {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length > 0) {
+                importWorkers(fileInput.files[0]);
+            }
+        });
+
+        // Event listener to add a new worker
+        document.getElementById('saveWorkerButton').addEventListener('click', () => {
+            const newWorker = {
+                "WORKER ID": document.getElementById('workerId').value,
+                "NAME": document.getElementById('workerName').value,
+                "ROLE": document.getElementById('workerRole').value,
+                "SKILL LEVEL": document.getElementById('workerSkillLevel').value,
+                "AVAILABILITY": document.getElementById('workerAvailability').value
+            };
+
+            document.querySelectorAll('.featureName').forEach((feature, i) => {
+                const label = feature.value.trim().toUpperCase();
+                const value = document.querySelectorAll('.featureValue')[i].value.trim();
+                if (label && value) {
+                    newWorker[label] = value;
+                    featureHeaders.add(label); // Dynamically add feature label to headers
+                }
+            });
+
+            workers.push(newWorker);
+            displayWorkers();
+            clearInputs();
+        });
+
+        // Clear inputs after saving
+        function clearInputs() {
+            document.getElementById('workerId').value = '';
+            document.getElementById('workerName').value = '';
+            document.getElementById('workerRole').value = '';
+            document.getElementById('workerSkillLevel').value = '';
+            document.getElementById('workerAvailability').value = '';
+            document.querySelectorAll('.featureName, .featureValue').forEach(input => input.value = '');
+        }
+
+        // Add feature fields dynamically
+        document.getElementById('addFeatureButton').addEventListener('click', () => {
+            const featureContainer = document.getElementById('featureContainer');
+            const featureName = document.createElement('input');
+            featureName.className = 'featureName';
+            featureName.placeholder = 'FEATURE NAME';
+            featureContainer.appendChild(featureName);
+
+            const featureValue = document.createElement('input');
+            featureValue.className = 'featureValue';
+            featureValue.placeholder = 'FEATURE VALUE';
+            featureContainer.appendChild(featureValue);
+        });
+    </script>
+</body>
+</html>
